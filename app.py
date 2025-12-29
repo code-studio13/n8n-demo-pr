@@ -77,19 +77,7 @@ def submit_application():
 
         return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
     
-       return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
-
-      return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
-      return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
-
-     return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
-    
-       return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
-
-      return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
-      return jsonify({'success': True, 'message': 'Application submitted successfully.'}), 200
-    except mysql.connector.Error as err:
-        conn.rollback()
+             conn.rollback()
         print(f"Database error during insertion: {err}")
         return jsonify({'success': False, 'message': f'Database error: {err}'}), 500
         
@@ -101,5 +89,6 @@ if __name__ == '__main__':
     # Run the application (you may need to specify host/port based on your setup)
 
     app.run(debug=True, port=5000)  
+
 
 
