@@ -12,6 +12,12 @@ DB_CONFIG = {
 app = Flask(__name__)
 
 # --- Database Connection and Query Logic ---
+DB_CONFIG = {
+    'host': 'localhost',
+    'user': 'root', # Your MySQL Username
+    'password': 'your_mysql_password', # Your MySQL Password
+    'database': 'drone_pilot_db'
+}
 
 def create_db_connection():
     """Establishes and returns a MySQL database connection."""
