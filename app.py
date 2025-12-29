@@ -12,6 +12,12 @@ DB_CONFIG = {
 app = Flask(__name__)
 
 # --- Database Connection and Query Logic ---
+DB_CONFIG = {
+    'host': 'localhost',
+    'user': 'root', # Your MySQL Username
+    'password': 'your_mysql_password', # Your MySQL Password
+    'database': 'drone_pilot_db'
+}
 
 def create_db_connection():
     """Establishes and returns a MySQL database connection."""
@@ -101,5 +107,6 @@ if __name__ == '__main__':
     # Run the application (you may need to specify host/port based on your setup)
 
     app.run(debug=True, port=5000)  
+
 
 
