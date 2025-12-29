@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Drone Pilot Application</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fc; }
+        .form-step { display: none; }
+        .form-step.active { display: block; }
+        /* Style for the step indicator dots/numbers */
+        .step-indicator { 
+            width: 1.5rem; 
+            height: 1.5rem;
+            font-size: 0.75rem;
+        }
+        .step-indicator.active { background-color: #059669; color: white; border-color: #059669; }
+        .step-indicator.complete { background-color: #34d399; color: white; }
+        /* Style for required file input when required */
+        input[type="file"]:required:invalid {
+            border-color: #ef4444; /* Red border */
+            box-shadow: 0 0 0 1px #ef4444;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-6 md:p-10 border border-gray-100">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Interview Web Form</h1>
+        <p class="text-xl text-emerald-600 mb-6">Agricultural Drone Pilot</p>
+        
+        <div class="flex justify-between items-center mb-8">
+            <div id="step-indicators-container" class="flex justify-center items-center w-full">
+                </div>
+        </div>
+
+        <form id="pilot-application-form" onsubmit="return false;">
+            <input type="hidden" name="action" value="submit_application">
+            
+            <div id="form-steps-container">
+                
+                <div id="step-1" class="form-step active">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">1/11. Personal Details: Full Name</h2>
+                    <div class="mb-4">
+                        <label for="full_name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="full_name" name="full_name" required 
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500" 
+                                data-input-type="text-only" placeholder="e.g., John Doe">
+                        <p class="text-xs text-red-500 mt-1 hidden" id="name-error">Name must contain letters and spaces only.</p>
+                    </div>
+                </div>
+
+                <div id="step-2" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">2/11. Personal Details: Email</h2>
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="email" name="email" required 
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500" 
+                                placeholder="e.g., email@example.com">
+                        <p class="text-xs text-gray-500 mt-1">This email must be unique and will be checked against the database upon submission.</p>
+                    </div>
+                </div>
+
+                <div id="step-3" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">3/11. Personal Details: Phone Number</h2>
+                    <div class="mb-6 flex space-x-3">
+                        <div class="w-1/3">
+                            <label for="country_code" class="block text-sm font-medium text-gray-700 mb-1">Code</label>
+                            <input type="text" id="country_code" name="country_code" value="+44" required
+                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500" 
+                                    placeholder="+XX" data-input-type="text-and-plus">
+                        </div>
+                        <div class="w-2/3">
+                            <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                            <input type="tel" id="phone_number" name="phone_number" required 
+                                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500" 
+                                    data-input-type="number-only" placeholder="Enter number">
+                            <p class="text-xs text-red-500 mt-1 hidden" id="phone-error">Phone number must contain digits only.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-4" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">4/11. Residency: Live in EU/UK?</h2>
+                    <div class="mb-6">
+                        <p class="block text-sm font-medium text-gray-700 mb-2">Are you currently living in the EU or UK?</p>
+                        <div class="flex space-x-6">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="living_eu_uk" value="Yes" required class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                                <span class="ml-2 text-gray-700">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="living_eu_uk" value="No" class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                                <span class="ml-2 text-gray-700">No</span>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Note: Must have a valid visa/residency permit in the EU or UK.</p>
+                    </div>
+                </div>
+
+                <div id="step-5" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">5/11. Licensing: Hold a valid drone pilot license?</h2>
+                    <div class="mb-6">
+                        <p class="block text-sm font-medium text-gray-700 mb-2">Do you hold a valid drone pilot license?</p>
+                        <div class="flex space-x-6">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="hold_license" value="Yes" required 
+                                    class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                                    onchange="toggleLicenseRequirement(true)">
+                                <span class="ml-2 text-gray-700">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="hold_license" value="No" 
+                                    class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"
+                                    onchange="toggleLicenseRequirement(false)">
+                                <span class="ml-2 text-gray-700">No</span>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Selecting 'Yes' makes license attachment (Step 11) mandatory.</p>
+                    </div>
+                </div>
+
+                <div id="step-6" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">6/11. Experience: Agricultural Drone Experience?</h2>
+                    <div class="mb-4">
+                        <label for="prior_experience_radio" class="block text-sm font-medium text-gray-700 mb-2">Do you have prior experience operating agricultural drones?</label>
+                        <div class="flex space-x-6 mb-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="prior_experience_radio" id="exp_yes" value="Yes" required class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500" onchange="toggleExperienceInput('prior_experience')">
+                                <span class="ml-2 text-gray-700">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="prior_experience_radio" id="exp_no" value="No" class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500" onchange="toggleExperienceInput('prior_experience')">
+                                <span class="ml-2 text-gray-700">No</span>
+                            </label>
+                        </div>
+                        
+                        <div id="prior_experience_input" class="transition-all duration-300 max-h-0 overflow-hidden opacity-0">
+                            <label for="prior_experience" class="block text-sm font-medium text-gray-700 mb-1">If yes, specify model(s):</label>
+                            <input type="text" id="prior_experience" name="prior_experience" 
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500" 
+                                placeholder="e.g., DJI Agras T30, XAG P100">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-7" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">7/11. Equipment: Do you own an agricultural drone?</h2>
+                    <div class="mb-4">
+                        <label for="own_drone_radio" class="block text-sm font-medium text-gray-700 mb-2">Do you own an agricultural drone?</label>
+                        <div class="flex space-x-6 mb-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="own_drone_radio" id="own_yes" value="Yes" required class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500" onchange="toggleExperienceInput('own_drone')">
+                                <span class="ml-2 text-gray-700">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="own_drone_radio" id="own_no" value="No" class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500" onchange="toggleExperienceInput('own_drone')">
+                                <span class="ml-2 text-gray-700">No</span>
+                            </label>
+                        </div>
+
+                        <div id="own_drone_input" class="transition-all duration-300 max-h-0 overflow-hidden opacity-0">
+                            <label for="own_drone" class="block text-sm font-medium text-gray-700 mb-1">If yes, mention model and capacity (e.g., 50L/100L):</label>
+                            <input type="text" id="own_drone" name="own_drone" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500" placeholder="e.g., DJI Agras T30 (50L)">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-8" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">8/11. Commitment: Willingness to Travel?</h2>
+                    <div class="mb-4">
+                        <p class="block text-sm font-medium text-gray-700 mb-2">Are you willing to travel across EU or UK countries for work?</p>
+                        <div class="flex space-x-6">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="willing_to_travel" value="Yes" required class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                                <span class="ml-2 text-gray-700">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="willing_to_travel" value="No" class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                                <span class="ml-2 text-gray-700">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-9" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">9/11. Financial: Visa Investment?</h2>
+                    <div class="mb-6">
+                        <p class="block text-sm font-medium text-gray-700 mb-2">Do you invest between EURO 25000 to 35000 for EU or UK Self Sponsor visa?</p>
+                        <div class="flex space-x-6">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="self_sponsor_invest" value="Yes" required class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                                <span class="ml-2 text-gray-700">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="self_sponsor_invest" value="No" class="form-radio h-4 w-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                                <span class="ml-2 text-gray-700">No</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="step-10" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">10/11. Documents: Attach CV</h2>
+                    <div class="mb-6 p-4 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                        <label for="attach_cv" class="block text-sm font-medium text-gray-700 mb-1">Please attach your CV <span class="text-red-500">*Required</span></label>
+                        <input type="file" id="attach_cv" name="attach_cv" accept=".pdf,image/*" required 
+                                class="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                        <p class="text-xs text-gray-500 mt-1">Upload 1 supported file: PDF or image. Max 10 MB (Simulated upload).</p>
+                    </div>
+                </div>
+                
+                <div id="step-11" class="form-step">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-2">11/11. Documents: Attach License</h2>
+                    <div class="mb-6 p-4 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                        <label for="attach_license" class="block text-sm font-medium text-gray-700 mb-1">Attach Drone License copy 
+                            <span id="license-required-text" class="text-red-500 hidden">*Required</span>
+                        </label>
+                        <input type="file" id="attach_license" name="attach_license" accept=".pdf,image/*" 
+                                class="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                        <p class="text-xs text-gray-500 mt-1">Upload 1 supported file: PDF or image. Max 10 MB (Simulated upload).</p>
+                    </div>
+
+                    <div id="submission-message" class="hidden p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg mt-6" role="alert">
+                        Application submitted successfully!
+                    </div>
+                    <div id="submission-error" class="hidden p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg mt-6" role="alert">
+                        Submission failed. Please check the form and try again.
+                    </div>
+                </div>
+
+            </div>
+            <div class="flex justify-between pt-6 border-t border-gray-100 mt-6">
+                <button type="button" id="back-button" onclick="prevStep()" class="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-full shadow-md hover:bg-gray-300 transition-colors duration-200 hidden">
+                    &larr; Back
+                </button>
+                
+                <button type="button" id="next-button" onclick="nextStep()" class="px-8 py-2 bg-emerald-600 text-white font-semibold rounded-full shadow-lg hover:bg-emerald-700 transition-colors duration-200 ml-auto">
+                    Next &rarr;
+                </button>
+
+                <button type="submit" id="submit-button" onclick="submitForm()" class="px-8 py-2 bg-green-600 text-white font-semibold rounded-full shadow-lg hover:bg-green-700 transition-colors duration-200 hidden">
+                    Submit Application
+                </button>
+
+                <button type="reset" onclick="resetForm()" class="px-6 py-2 bg-red-500 text-white font-semibold rounded-full shadow-md hover:bg-red-600 transition-colors duration-200">
+                    Reset
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = document.querySelectorAll('.form-step').length; 
+        const form = document.getElementById('pilot-application-form');
+        const nextButton = document.getElementById('next-button');
+        const backButton = document.getElementById('back-button');
+        const submitButton = document.getElementById('submit-button');
+        const indicatorsContainer = document.getElementById('step-indicators-container');
+
+        // --- UI Initialization and Updates ---
+
+        function setupIndicators() {
+            indicatorsContainer.innerHTML = '';
+            for (let i = 1; i <= totalSteps; i++) {
+                const indicator = document.createElement('div');
+                indicator.id = `step-${i}-indicator`;
+                indicator.className = 'step-indicator flex items-center justify-center rounded-full border-2 text-gray-500 font-bold transition-all duration-300';
+                indicator.textContent = i;
+                
+                if (i > 1) {
+                    const separator = document.createElement('div');
+                    separator.className = 'flex-grow h-0.5 bg-gray-200 mx-1';
+                    indicatorsContainer.appendChild(separator);
+                }
+
+                indicatorsContainer.appendChild(indicator);
+            }
+        }
+
+        function updateUI() {
+            document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+
+            backButton.classList.toggle('hidden', currentStep === 1);
+            nextButton.classList.toggle('hidden', currentStep === totalSteps);
+            submitButton.classList.toggle('hidden', currentStep !== totalSteps);
+            
+            nextButton.classList.toggle('ml-auto', currentStep === 1);
+            backButton.classList.toggle('ml-auto', currentStep !== 1);
+
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                indicator.classList.remove('active', 'complete', 'border-emerald-500', 'border-gray-300');
+                const step = index + 1;
+                if (step === currentStep) {
+                    indicator.classList.add('active');
+                } else if (step < currentStep) {
+                    indicator.classList.add('complete');
+                } else {
+                    indicator.classList.add('border-2', 'border-gray-300', 'text-gray-500');
+                }
+            });
+        }
+
+        // --- Conditional Logic (Steps 5 to 11 Requirement) ---
+        
+        function toggleLicenseRequirement(isRequired) {
+            const licenseInput = document.getElementById('attach_license');
+            const requiredText = document.getElementById('license-required-text');
+
+            if (isRequired) {
+                licenseInput.setAttribute('required', 'required');
+                requiredText.classList.remove('hidden');
+            } else {
+                licenseInput.removeAttribute('required');
+                requiredText.classList.add('hidden');
+                // Optional: Clear the file input if the requirement is removed
+                licenseInput.value = ''; 
+            }
+        }
+
+        // --- Conditional Input Visibility (Steps 6 & 7) ---
+
+        function toggleExperienceInput(fieldName) {
+            const radioGroupName = fieldName + '_radio';
+            const inputContainer = document.getElementById(fieldName + '_input');
+            const relatedInput = document.getElementById(fieldName);
+            
+            const selectedRadio = document.querySelector(`input[name="${radioGroupName}"]:checked`);
+            
+            if (selectedRadio && selectedRadio.value === 'Yes') {
+                inputContainer.classList.remove('max-h-0', 'opacity-0');
+                inputContainer.classList.add('max-h-96', 'opacity-100');
+                if (relatedInput) relatedInput.setAttribute('required', 'required');
+            } else {
+                inputContainer.classList.remove('max-h-96', 'opacity-100');
+                inputContainer.classList.add('max-h-0', 'opacity-0');
+                if (relatedInput) {
+                    relatedInput.removeAttribute('required');
+                    relatedInput.value = '';
+                }
+            }
+        }
+
+
+        // --- Validation Logic (Client-side checks) ---
+
+        function isRadioGroupChecked(name) {
+            return document.querySelector(`input[name="${name}"]:checked`) !== null;
+        }
+
+        function validateStep(step) {
+            const stepElement = document.getElementById(`step-${step}`);
+            let isValid = true;
+            
+            const fields = stepElement.querySelectorAll('[required]');
+            
+            // Check required fields (including conditional file input in step 11)
+            fields.forEach(field => {
+                if (field.type !== 'radio' && field.type !== 'file' && !field.value.trim()) {
+                    isValid = false;
+                    field.reportValidity();
+                } else if (field.type === 'file' && field.hasAttribute('required') && field.files.length === 0) {
+                     isValid = false;
+                     field.reportValidity();
+                }
+            });
+
+            if (!isValid) return false;
+            
+            // --- Custom Validation Checks ---
+            if (step === 1) {
+                const fullNameField = document.getElementById('full_name');
+                const nameError = document.getElementById('name-error');
+                const namePattern = /^[a-zA-Z\s]+$/;
+                if (!namePattern.test(fullNameField.value.trim())) {
+                    nameError.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    nameError.classList.add('hidden');
+                }
+            } 
+            // Step 2 (Email) only checks basic browser validity here; uniqueness is server-side
+            else if (step === 3) {
+                const phoneField = document.getElementById('phone_number');
+                const phoneError = document.getElementById('phone-error');
+                const phonePattern = /^\d+$/; 
+                if (!phonePattern.test(phoneField.value.trim())) {
+                    phoneError.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    phoneError.classList.add('hidden');
+                }
+                const countryCodeField = document.getElementById('country_code');
+                const codePattern = /^\+\d{1,4}$/;
+                if (!codePattern.test(countryCodeField.value.trim())) {
+                    countryCodeField.setCustomValidity("Please enter a valid country code (e.g., +44).");
+                    isValid = false;
+                } else {
+                     countryCodeField.setCustomValidity("");
+                }
+            } else if ([4, 5, 8, 9].includes(step)) {
+                // Radio group required check
+                const radioGroupName = stepElement.querySelector('input[type="radio"]').name;
+                 if (!isRadioGroupChecked(radioGroupName)) {
+                    stepElement.querySelector('input[type="radio"]').reportValidity();
+                    isValid = false;
+                }
+            } else if (step === 6) {
+                // Conditional text field validation
+                if (!isRadioGroupChecked('prior_experience_radio')) {
+                    document.getElementsByName('prior_experience_radio')[0].reportValidity();
+                    isValid = false;
+                } else if (document.getElementById('exp_yes').checked && !document.getElementById('prior_experience').value.trim()) {
+                     document.getElementById('prior_experience').reportValidity();
+                     isValid = false;
+                }
+            } else if (step === 7) {
+                 // Conditional text field validation
+                 if (!isRadioGroupChecked('own_drone_radio')) {
+                    document.getElementsByName('own_drone_radio')[0].reportValidity();
+                    isValid = false;
+                } else if (document.getElementById('own_yes').checked && !document.getElementById('own_drone').value.trim()) {
+                     document.getElementById('own_drone').reportValidity();
+                     isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        function nextStep() {
+            if (validateStep(currentStep)) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateUI();
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateUI();
+            }
+        }
+
+        function resetForm() {
+            form.reset();
+            currentStep = 1;
+            updateUI();
+            document.getElementById('submission-message').classList.add('hidden');
+            document.getElementById('submission-error').classList.add('hidden');
+            document.getElementById('name-error').classList.add('hidden');
+            document.getElementById('phone-error').classList.add('hidden');
+            
+            document.getElementById('prior_experience_input').classList.remove('max-h-96', 'opacity-100');
+            document.getElementById('prior_experience_input').classList.add('max-h-0', 'opacity-0');
+            document.getElementById('own_drone_input').classList.remove('max-h-96', 'opacity-100');
+            document.getElementById('own_drone_input').classList.add('max-h-0', 'opacity-0');
+            
+            toggleLicenseRequirement(false); 
+        }
+
+        // --- Summary Page Generation ---
+
+        function generateSummaryPage(data) {
+            const container = document.querySelector('.max-w-2xl');
+            
+            // Map form field names to user-friendly labels for the summary
+            const labelMap = {
+                full_name: "Full Name",
+                email: "Email",
+                country_code: "Country Code",
+                phone_number: "Phone Number",
+                living_eu_uk: "Residency in EU/UK",
+                hold_license: "Valid Drone Pilot License",
+                prior_experience_radio: "Prior Ag-Drone Experience",
+                prior_experience: "Specified Drone Models",
+                own_drone_radio: "Own Agricultural Drone",
+                own_drone: "Owned Drone Model/Capacity",
+                willing_to_travel: "Willingness to Travel (EU/UK)",
+                self_sponsor_invest: "Visa Investment Willingness",
+            };
+            
+            let summaryHTML = `
+                <h1 class="text-3xl font-bold text-emerald-700 mb-2">✅ Application Submitted Successfully!</h1>
+                <p class="text-lg text-gray-600 mb-8">Thank you for applying. Your details have been received. We will contact you at ${data.email || 'the provided email address'}.</p>
+                
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Summary of Application Data:</h2>
+                
+                <div class="space-y-4">
+            `;
+
+            // Data contains the successful form submission details
+            for (const [key, value] of Object.entries(data)) {
+                // Skip internal form data and file data (as files aren't stored in this summary)
+                if (key === 'action' || key.startsWith('attach_')) continue;
+                
+                // Skip conditional text fields if the answer was 'No'
+                if (key === 'prior_experience' && data.prior_experience_radio === 'No') continue;
+                if (key === 'own_drone' && data.own_drone_radio === 'No') continue;
+                
+                let displayLabel = labelMap[key] || key.replace(/_/g, ' ').toUpperCase();
+                let displayValue = value.trim() || 'N/A';
+                
+                summaryHTML += `
+                    <div class="flex border-b border-gray-100 pb-2">
+                        <span class="font-medium text-gray-600 w-1/2">${displayLabel}:</span>
+                        <span class="text-gray-900 w-1/2 font-bold">${displayValue}</span>
+                    </div>
+                `;
+            }
+
+            summaryHTML += `
+                </div>
+                <div class="pt-6 mt-6 border-t border-gray-200">
+                    <button onclick="window.location.reload()" class="px-6 py-2 bg-emerald-600 text-white font-semibold rounded-full shadow-lg hover:bg-emerald-700 transition-colors duration-200">
+                        Start a New Application
+                    </button>
+                </div>
+            `;
+
+            container.innerHTML = summaryHTML;
+            container.classList.add('h-full');
+        }
+
+
+        // --- Submission Logic (Sends data to Flask backend on port 5000) ---
+
+        async function submitForm() {
+            // Final client-side validation check
+            if (!validateStep(currentStep)) return; 
+
+            document.getElementById('submission-error').classList.add('hidden');
+            
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Submitting...';
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries()); 
+
+            try {
+                // IMPORTANT: Ensure your Flask server is running on http://127.0.0.1:5000
+                const response = await fetch('http://127.0.0.1:5000/submit', {
+                    method: 'POST',
+                    body: formData 
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    console.log("Server success:", result.message);
+                    generateSummaryPage(data);
+                } else {
+                    console.error("Server failure:", result.message);
+                    
+                    const emailField = document.getElementById('email');
+                    
+                    if (response.status === 409) { 
+                        // Specific handling for unique email conflict from Flask
+                        emailField.setCustomValidity(result.message);
+                        emailField.reportValidity();
+                    } else {
+                        // General server errors
+                        document.getElementById('submission-error').innerHTML = result.message;
+                        document.getElementById('submission-error').classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                document.getElementById('submission-error').innerHTML = 'A network error occurred. Please ensure your Flask server is running on port 5000.';
+                document.getElementById('submission-error').classList.remove('hidden');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Submit Application';
+            }
+        }
+
+        // --- Custom Input Filtering Handlers ---
+
+        document.querySelectorAll('input').forEach(input => {
+            const inputType = input.getAttribute('data-input-type');
+
+            if (inputType === 'text-only') {
+                input.addEventListener('input', (event) => {
+                    event.target.value = event.target.value.replace(/[^a-zA-Z\s]/g, '');
+                });
+            } else if (inputType === 'number-only') {
+                input.addEventListener('input', (event) => {
+                    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+                });
+            } else if (inputType === 'text-and-plus') {
+                input.addEventListener('input', (event) => {
+                    let value = event.target.value.trim();
+                    if (value.startsWith('+')) {
+                        event.target.value = '+' + value.substring(1).replace(/[^0-9]/g, '');
+                    } else {
+                        event.target.value = value.replace(/[^+0-9]/g, '').replace(/\+/g, '');
+                    }
+                });
+            }
+        });
+
+        // Initialize UI on load
+        setupIndicators();
+        updateUI();
+        toggleLicenseRequirement(false); 
+
+    </script>
+</body>
+</html>
