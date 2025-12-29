@@ -21,6 +21,14 @@ def create_db_connection():
     except mysql.connector.Error as err:
         print(f"Error connecting to MySQL: {err}")
         return None
+def create_db_connection():
+    """Establishes and returns a MySQL database connection."""
+    try:
+        conn = mysql.connector.connect(**DB_CONFIG)
+        return conn
+    except mysql.connector.Error as err:
+        print(f"Error connecting to MySQL: {err}")
+        return None
 
 @app.route('/submit', methods=['POST'])
 def submit_application():
@@ -101,5 +109,6 @@ if __name__ == '__main__':
     # Run the application (you may need to specify host/port based on your setup)
 
     app.run(debug=True, port=5000)  
+
 
 
